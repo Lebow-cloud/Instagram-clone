@@ -1,13 +1,9 @@
 
 
-// v9 compat packages are API compatible with v8 code
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
-import { initializeApp } from "firebase/app"
+import firebase from "firebase"
 
 
-  const firebaseApp = initializeApp({
+  const firebaseApp = firebase.initializeApp({
     apiKey: "AIzaSyBgqAVt-rJECuurAxK7P28XOktXNjAsDzY",
     authDomain: "instagram-clone-lebow.firebaseapp.com",
     projectId: "instagram-clone-lebow",
@@ -17,7 +13,7 @@ import { initializeApp } from "firebase/app"
     measurementId: "G-1CNXR7181W"
   })
 
-  const db = firebase.firestore()
+  const db = firebaseApp.firestore()
   const auth = firebase.auth()
   const storage = firebase.storage()
 

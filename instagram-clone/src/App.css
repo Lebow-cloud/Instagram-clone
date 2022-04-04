@@ -14,3 +14,17 @@
   border-bottom: 1px solid lightgrey;
   object-fit: contain;
 }
+
+.modalStyle {
+  position: 'absolute';
+  top: '50%';
+  left: '50%';
+  transform: 'translate(-50%, -50%)';
+  width: 400;
+  border: '2px solid #000';
+}
+
+.app__signup {
+  display:flex;
+  flex-direction:column;
+}
