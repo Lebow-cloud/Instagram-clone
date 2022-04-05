@@ -3,7 +3,10 @@ import "./App.css";
 import "./css/Post.css";
 import { useState } from "react";
 import Post from "./components/Post";
+import ImageUpload from "./components/ImageUpload";
 import { db, auth } from "./firebase";
+import { IGEmbed } from "react-ig-embed";
+
 import Modal from "@material-ui/core/Modal";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
@@ -28,7 +31,7 @@ function App() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [user, setUser] = useState(null);
-  const [openSignIn, setOpenSignIn] = useState(false)
+  const [openSignIn, setOpenSignIn] = useState(false);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
@@ -48,14 +51,16 @@ function App() {
   }, [user, username]);
 
   useEffect(() => {
-    db.collection("posts").onSnapshot((snapshot) => {
-      setPosts(
-        snapshot.docs.map((doc) => ({
-          id: doc.id,
-          post: doc.data(),
-        }))
-      );
-    });
+    db.collection("posts")
+      .orderBy("timestamp", "desc")
+      .onSnapshot((snapshot) => {
+        setPosts(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            post: doc.data(),
+          }))
+        );
+      });
   }, []);
 
   const signUp = (event) => {
@@ -71,14 +76,13 @@ function App() {
   };
 
   const signIn = (event) => {
-    event.preventDefault()
+    event.preventDefault();
     auth
       .signInWithEmailAndPassword(email, password)
-      .catch((error) => alert(error.message))
+      .catch((error) => alert(error.message));
 
-    setOpenSignIn(false)
-
-  }
+    setOpenSignIn(false);
+  };
 
   return (
     <div className="app">
@@ -160,28 +164,37 @@ function App() {
           src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png"
           alt=""
         />
+        {user ? (
+          <Button onClick={() => auth.signOut()}>Logout</Button>
+        ) : (
+          <div className="app__loginContainer">
+            <Button onClick={() => setOpenSignIn(true)}>LogIn </Button>
+            <Button onClick={() => setOpen(true)}>Sign Up</Button>
+          </div>
+        )}
+      </div>
+      <div className="app__posts">
+        <div className="app__postsLeft">
+          {posts.map(({ id, post }) => (
+            <Post
+              key={id}
+              postId={id}
+              username={post.username}
+              caption={post.caption}
+              imageURL={post.imageURL}
+            />
+          ))}
+        </div>
+        <div className="app__postsRight">
+          <IGEmbed url="https://www.instagram.com/p/CUaqXgjswll/" />
+        </div>
       </div>
 
-      <h1>Stories Space</h1>
-
-      {user ? (
-        <Button onClick={() => auth.signOut()}>Logout</Button>
+      {user?.displayName ? (
+        <ImageUpload username={user.displayName} />
       ) : (
-        <div className="app__loginContainer">
-        <Button onClick={() => setOpenSignIn(true)}>LogIn </Button>
-        <Button onClick={() => setOpen(true)}>Sign Up</Button>
-
-        </div>
+        <h3>Sorry you need to login to upload</h3>
       )}
-
-      {posts.map(({ id, post }) => (
-        <Post
-          key={id}
-          username={post.username}
-          caption={post.caption}
-          imageURL={post.imageURL}
-        />
-      ))}
     </div>
   );
 }
