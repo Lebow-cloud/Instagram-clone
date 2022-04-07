@@ -17,7 +17,7 @@ function Post({ postId, user, username, caption, imageURL }) {
         .collection("comments")
         .orderBy("timestamp","desc")
         .onSnapshot((snapshot) => {
-          setComments(snapshot.docs.map((doc) => doc.data));
+          setComments(snapshot.docs.map((doc) => doc.data()));
         });
     }
 
@@ -41,43 +41,46 @@ function Post({ postId, user, username, caption, imageURL }) {
   return (
     <div className="post">
       <div className="post__header">
-        <Avatar className="post__avatar" alt="" src="" />
+        <Avatar 
+        className="post__avatar" 
+        alt="" 
+        src="" />
         <h3>{username}</h3>
       </div>
 
       <img className="post__image" src={imageURL} />
 
       <h4 className="post__text">
-        <strong>{username}</strong> {caption}
+        <strong>{username}</strong> 
+        {caption}
       </h4>
 
       <div className="post__comments">
-      {comments.map(el => (
-        <div>
-          <p>{el.text}</p>
-        </div>
-        
-        
-      ))}
+        {comments.map((comment) => (
+          <p>
+            <strong>{comment.username}</strong> {comment.text}
+          </p>
+        ))}
       </div>
-
-      <form className="post__commentBox">
-        <input
-          className="post__input"
-          type="text"
-          placeholder="Your comment here..."
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-        />
-        <button
-          className="post__button"
-          disabled={!comment}
-          type="submit"
-          onClick={postComment}
-        >
-          Post
-        </button>
-      </form>
+      {user && (
+        <form className="post__commentBox">
+          <input
+            className="post__input"
+            type="text"
+            placeholder="Add a comment..."
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+          />
+          <button
+            className="post__button"
+            disabled={!comment}
+            type="submit"
+            onClick={postComment}
+          >
+            Post
+          </button>
+        </form>
+      )}
     </div>
   );
 }
