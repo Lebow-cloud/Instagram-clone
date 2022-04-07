@@ -4,7 +4,7 @@ import Avatar from "@material-ui/core/Avatar";
 import { db } from "../firebase";
 import firebase from "firebase"
 
-function Post({ postId, user, username, caption, imageURL }) {
+function Post({ postId, user, username, caption, imageURL, profilePic }) {
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
 
@@ -43,8 +43,8 @@ function Post({ postId, user, username, caption, imageURL }) {
       <div className="post__header">
         <Avatar 
         className="post__avatar" 
-        alt="" 
-        src="" />
+        alt= ""
+        src={profilePic} />
         <h3>{username}</h3>
       </div>
 

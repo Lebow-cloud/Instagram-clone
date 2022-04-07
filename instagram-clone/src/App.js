@@ -183,6 +183,7 @@ function App() {
               caption={post.caption}
               imageURL={post.imageURL}
               user={user}
+              profilePic={post.profilePic}
             />
           ))}
         </div>
