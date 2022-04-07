@@ -6,6 +6,8 @@ It was very fun to learn how to do things diferent.
 
 Here you have the deploy link!
 
+Try to SIGNUP and leave some Comment!
+
 https://instagram-clone-lebow.web.app
 
 # CSS used with MUI
